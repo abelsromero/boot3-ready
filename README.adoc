@@ -1,0 +1,57 @@
+= Spring Boot 3, ready or not!?
+
+Spring Boot 3 Native demo project.
+
+
+== Requirements
+
+Currently uses SpringBoot version `3.0.0-M5`.
+`3.0.0-RC1` requires Graal 22.3 witch is failing installation via https://sdkman.io/[sdkman].
+Featured elements are not affected by this version.
+
+Any Graal distribution 22.2+ works.
+
+== Building
+
+Build OS dependant native image
+
+ ./gradlew nativeCompile
+
+
+Directly build docker image (Linux OS) with integrated https://paketo.io/[Paketo Buildpacks].
+
+ ./gradlew bootBuildImage
+
+
+== Testing
+
+Project is build to cause a failing tests ONLY for the native build due to use of Reflection.
+
+
+`HelloControllerTest` passes fine in JVM.
+
+ ./gradle test
+
+But test method `shouldReturnMessageFromReflectiveInstance` will fail on native, displaying error bellow.
+
+ ./gradle nativeTest
+
+----
+Failures (1):
+  JUnit Jupiter:HelloControllerTest:shouldReturnMessageFromReflectiveInstance()
+    MethodSource [className = 'com.example.boot3ready.HelloControllerTest', methodName = 'shouldReturnMessageFromReflectiveInstance', methodParameterTypes = '']
+    => jakarta.servlet.ServletException: Request processing failed: java.lang.NoSuchMethodException: com.example.boot3ready.HelloService.hello(java.lang.String)
+       org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1011)
+       org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:895)
+       jakarta.servlet.http.HttpServlet.service(HttpServlet.java:668)
+       org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:880)
+       org.springframework.test.web.servlet.TestDispatcherServlet.service(TestDispatcherServlet.java:72)
+       [...]
+     Caused by: java.lang.NoSuchMethodException: com.example.boot3ready.HelloService.hello(java.lang.String)
+       java.lang.Class.getMethod(DynamicHub.java:2227)
+       com.example.boot3ready.HelloController.reflectionInvocation(HelloController.java:43)
+       com.example.boot3ready.HelloController.hello(HelloController.java:34)
+       java.lang.reflect.Method.invoke(Method.java:568)
+       org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:205)
+       [...]
+----

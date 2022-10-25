@@ -2,6 +2,7 @@
 
 Spring Boot 3 Native demo project.
 
+https://docs.google.com/presentation/d/1KHL5aCsNxMqDqeipxUZd7CUDCg-mOKXYEAkICC8_2qI/edit?usp=sharing[Slides]
 
 == Requirements
 

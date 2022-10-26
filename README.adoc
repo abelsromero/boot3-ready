@@ -24,7 +24,7 @@ Directly build docker image (Linux OS) with integrated https://paketo.io/[Paketo
  ./gradlew bootBuildImage
 
 
-== Testing
+== Testing & Native compilation failure
 
 Project is build to cause a failing tests ONLY for the native build due to use of Reflection.
 
@@ -56,3 +56,9 @@ Failures (1):
        org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:205)
        [...]
 ----
+
+== Applying Hints to fix Native compilation failure
+
+. Uncomment `@ImportRuntimeHints` line from `AppConfiguration`
+. Run `./gradle nativeTest` and see all tests pass. +
+ Or, generate image and run `curl "http://localhost:8080/hello/Glovo?source=reflection" | jq` successfully now.

@@ -20,6 +20,8 @@ Directly build docker image (Linux OS) with integrated https://paketo.io/[Paketo
 
  ./gradlew bootBuildImage
 
+NOTE: You can find reachability metadata for dependencies in _~.gradle/native-build-tools/repositories_.
+
 
 == Testing & Native compilation failure
 
